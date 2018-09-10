@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :address do
-    street { "MyString" }
+    street { 'MyString' }
     number { 1 }
-    zip_code { "MyString" }
-    complement { "MyString" }
+    zip_code { 'MyString' }
+    complement { 'MyString' }
     owner { nil }
   end
 end
