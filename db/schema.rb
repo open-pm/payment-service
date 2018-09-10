@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_08_044648) do
+ActiveRecord::Schema.define(version: 2018_09_10_024445) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -51,7 +51,17 @@ ActiveRecord::Schema.define(version: 2018_09_08_044648) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "recipients", force: :cascade do |t|
+    t.string "remote_id"
+    t.string "provider_name"
+    t.bigint "owner_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["owner_id"], name: "index_recipients_on_owner_id"
+  end
+
   add_foreign_key "addresses", "owners"
   add_foreign_key "contact_infos", "owners"
   add_foreign_key "documents", "owners"
+  add_foreign_key "recipients", "owners"
 end
