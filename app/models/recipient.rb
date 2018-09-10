@@ -5,4 +5,6 @@
 # Onwer.
 class Recipient < ApplicationRecord
   belongs_to :owner
+
+  validates_presence_of :remote_id, :provider_name
 end
