@@ -9,7 +9,7 @@ addon:
 after_success:
   - bundle exec codeclimate-test-reporter
 before_script:
-  - cp config/database.travis.yml config/travis.yml
+  - cp config/database.travis.yml config/database.yml
   - bundle exec rails db:create
 dist: trusty
 rvm:
