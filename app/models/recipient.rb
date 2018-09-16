@@ -5,6 +5,7 @@
 # Onwer.
 class Recipient < ApplicationRecord
   belongs_to :owner
+  has_one :bank_account
 
-  validates_presence_of :remote_id, :provider_name
+  validates_presence_of :remote_id
 end
