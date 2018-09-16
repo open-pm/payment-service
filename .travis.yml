@@ -6,9 +6,6 @@ addon:
   postgresql: 9.6
   code_climate:
     repo_token: ${CODECLIMATE_TOKEN}
-env:
-  global:
-    - DB_USER = 
 after_success:
   - bundle exec codeclimate-test-reporter
 before_script:
@@ -16,7 +13,7 @@ before_script:
   - bundle exec rails db:create
 dist: trusty
 rvm:
-  - 1.29.3
+  - 2.4.1
 script:
   - bundle exec rails db:migrate RAILS_ENV=test
   - bundle exec rspec
