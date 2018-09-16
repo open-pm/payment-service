@@ -2,10 +2,6 @@ default: &default
   adapter: postgresql
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: <%= ENV.fetch("DATABASE_USER") { "open_pm_user" } %>
-  password: <%= ENV.fetch("DATABASE_PASSWORD") { "0p3n_pm_p4ss" } %>
-  host: <%= ENV.fetch("DATABASE_HOST") { "localhost"} %>
-  port: <%= ENV.fetch("DATABASE_PORT") { 5432 } %>
   timeout: 5000
 
 development:
@@ -17,7 +13,9 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: <%= ENV.fetch("DATABASE_TEST_DB") { "test" } %>
+  database: test_travis
+  username: postgres
+
 
 production:
   <<: *default
