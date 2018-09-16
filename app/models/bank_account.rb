@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # This class represents a Recipient's bank account. Here there are all information needed
 # to send money to a customer Owner.
 class BankAccount < ApplicationRecord
