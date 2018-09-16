@@ -1,0 +1,23 @@
+# open-pm CI configuration
+# @author: walteraa
+
+
+addon:
+  postgresql: 9.6
+  code_climate:
+    repo_token: ${CODECLIMATE_TOKEN}
+env:
+  global:
+    - DB_USER = 
+after_success:
+  - bundle exec codeclimate-test-reporter
+before_script:
+  - cp config/database.travis.yml config/travis.yml
+  - bundle exec rails db:create
+dist: trusty
+rvm:
+  - 1.29.3
+script:
+  - bundle exec rails db:migrate RAILS_ENV=test
+  - bundle exec rspec
+  - bundle exec rubocop
