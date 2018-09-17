@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :contact_info do
-    type { '' }
+    document_type { '' }
     info { 'MyString' }
     owner { nil }
   end

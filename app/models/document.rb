@@ -5,5 +5,5 @@
 # validations
 class Document < ApplicationRecord
   belongs_to :owner
-  validates_presence_of :type, :number
+  validates_presence_of :document_type, :number
 end

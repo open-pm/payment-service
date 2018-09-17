@@ -3,6 +3,6 @@
 FactoryBot.define do
   factory :document do
     number { 'MyString' }
-    type { '' }
+    document_type { '' }
   end
 end
