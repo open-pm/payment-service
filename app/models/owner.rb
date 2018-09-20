@@ -9,6 +9,6 @@ class Owner < ApplicationRecord
   has_one :address, dependent: :destroy
   has_many :recipient, dependent: :destroy
 
-  validates_presence_of :legal_name
-  accepts_nested_attributes_for :contact_infos, :document, :address
+  validates_presence_of :legal_name, :document, :contact_infos, :address
+  accepts_nested_attributes_for :document, :contact_infos, :address
 end
