@@ -61,4 +61,83 @@ RSpec.describe 'Owners API', type: :request do
 
     end
   end
+
+    describe 'POST /owners' do
+      context 'when invalid params' do
+        
+        it 'miss all returns Bad Request(400)' do
+          post  '/owners', params: {}
+          expect(response).to have_http_status(400)
+        end
+
+        it 'miss legal_name only' do
+          post  '/owners', params: {contact_infos_attributes: [], 
+                                    document_attributes: { 
+                                          document_type: %w(CPF CNPJ).sample, 
+                                          number: 12345},
+                                  address_attributes: {
+                                              street: Faker::Address.street_name,
+                                              number: Faker::Address.building_number,
+                                              zip_code:  Faker::Address.zip_code,
+                                              complement: [nil, "", Faker::Address.secondary_address].sample  }
+          }
+          expect(response).to have_http_status(400)
+        end
+
+        it 'miss contact_infos_attributes' do
+          post '/owners', params: {legal_name: Faker::StarWars.character, 
+                                   document_attributes: { document_type: %w(CPF CNPJ).sample, number: 1234},
+                                    address_attributes: {
+                                              street: Faker::Address.street_name,
+                                              number: Faker::Address.building_number,
+                                              zip_code:  Faker::Address.zip_code,
+                                              complement: [nil, "", Faker::Address.secondary_address].sample  }
+          }
+          expect(response).to have_http_status(400)
+        end
+
+        it 'miss document' do
+          post '/owners', params: {legal_name: Faker::StarWars.character, 
+                                   contact_infos_attributes: [],
+            
+                                    address_attributes: {
+                                              street: Faker::Address.street_name,
+                                              number: Faker::Address.building_number,
+                                              zip_code:  Faker::Address.zip_code,
+                                              complement: [nil, "", Faker::Address.secondary_address].sample  }
+          }
+          expect(response).to have_http_status(400)
+        end
+        
+        it 'miss address_attributes_attribtues' do
+          post '/owners', params: {legal_name: Faker::StarWars.character,
+                                  contact_infos_attributes: [], document_attributes: { document_type: %w(CPF CNPJ).sample, number: 12345} } 
+          expect(response).to have_http_status(400)
+        end
+      end
+    
+      context  'when valid params' do
+        before do
+          post '/owners', params:  {legal_name: Faker::StarWars.character, 
+                                    document_attributes: { document_type: %w(CPF CNPJ).sample, 
+                                                           number: 12345},
+                                    contact_infos_attributes:  [{contact_type: %w(email cell_phone land_number).sample, 
+                                                      info: Faker::Internet.email }],
+                                    address_attributes: {
+                                              street: Faker::Address.street_name,
+                                              number: Faker::Address.building_number,
+                                              zip_code:  Faker::Address.zip_code,
+                                              complement: [nil, "", Faker::Address.secondary_address].sample  }
+
+                                    }
+        end
+
+        it 'returns 200 OK' do
+          expect(response).to have_http_status(201)
+        end
+
+
+      end
+
+    end
 end

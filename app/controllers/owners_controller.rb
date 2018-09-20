@@ -17,13 +17,18 @@ class OwnersController < ApplicationController
 
   # POST /owners
   def create
-    @owner = Owner.create!(create_owner_params)
-    json_response(@owner, :created)
+    begin
+      @owner = Owner.create!(owner_params)
+      json_response(@owner, :created)
+    rescue ActiveRecord::RecordInvalid, ArgumentError, ActionController::ParameterMissing  => ex
+      head :bad_request
+    end
+
   end
 
   # PUT /owners/:id
   def update
-    @owner = Owner.update!(update_owner_params)
+    @owner = Owner.update!(owner_params)
 
     head :no_content
   end
@@ -39,14 +44,11 @@ class OwnersController < ApplicationController
     @owner = Owner.find(params[:id])
   end
 
-  def create_owner_params
-    params.require(:legal_name, contact_infos_attributes: [], document_attributes: [],
-                                address_attributes: [])
-  end
 
-  def update_owner_params
-    params.permit(:legal_name, contact_infos_attributes: %i[type info],
-                               document_attributes: %i[type number],
-                               address_attributes: %i[street number zip_code])
+  def owner_params
+    params.permit(:legal_name, document_attributes: [:document_type, :number],
+                  contact_infos_attributes: [:contact_type, :info], 
+                  address_attributes: [:street, :number, :zip_code]
+                 )
   end
 end
