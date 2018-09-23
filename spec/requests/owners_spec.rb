@@ -226,4 +226,38 @@ RSpec.describe 'Owners API', type: :request do
 
       end
 
+      context 'passing address attributes' do 
+        let(:new_address) do
+          {
+            street: Faker::Address.street_name,
+            number: Faker::Address.building_number,
+            zip_code:  Faker::Address.zip_code,
+            complement: [nil, "", Faker::Address.secondary_address].sample  
+          }
+        end
+        let(:owner){ owners.last }
+        let(:owner_serializer) { OwnerSerializer.new(owner) }
+
+        context 'should' do
+          before{ put "/owners/#{owner.id}", params: {adress_attributes: new_address } }
+
+          it 'return 204 No Content' do
+            expect(response).to have_http_status(204)
+          end
+
+          it 'update address values' do
+            get "/owners/#{owner.id}"
+            expect(json["address"].symbolize_keys).to eq(owner_serializer.serializable_hash[:address])
+          end
+        
+          it 'not update other values' do
+            get "/owners/#{owner.id}"
+            expect(json['legal_name']).to eq(owner.legal_name)
+            expect(json['document'].symbolize_keys  ).to eq(owner_serializer.serializable_hash[:document])
+            expect(json['contact_infos'].map{ |item|  item.symbolize_keys } ).to eq(owner_serializer.serializable_hash[:contact_infos])
+          end
+
+        end
+  
+      end
 end
