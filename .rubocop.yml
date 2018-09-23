@@ -3,6 +3,7 @@ AllCops:
     - 'db/**/*'
     - 'spec/rails_helper.rb'
     - 'bin/**'
+    - 'spec/**/*.rb'
 
 # Customize rules
 Metrics/LineLength:

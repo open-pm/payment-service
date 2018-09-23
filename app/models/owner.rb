@@ -13,7 +13,7 @@ class Owner < ApplicationRecord
   accepts_nested_attributes_for :document, :contact_infos, :address
 
   def contact_infos_attributes=(*attrs)
-    self.contact_infos.clear
+    contact_infos.clear
     super(*attrs)
   end
 end

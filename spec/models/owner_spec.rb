@@ -12,6 +12,4 @@ RSpec.describe Owner, type: :model do
   it { should validate_presence_of(:document) }
   it { should validate_presence_of(:contact_infos) }
   it { should validate_presence_of(:address) }
-    
-  
 end

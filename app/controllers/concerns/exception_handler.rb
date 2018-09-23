@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Handle Record exceptions and transform it in HTTP responses
 module ExceptionHandler
   extend ActiveSupport::Concern
 

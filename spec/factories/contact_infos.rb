@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :contact_info do
-    contact_type { %w(email, cel, land_number).sample }
+    contact_type { %w[email cel land_number].sample }
     info { 'MyString' }
   end
 end

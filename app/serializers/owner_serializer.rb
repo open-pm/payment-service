@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# Serializer class for Owner model
 class OwnerSerializer < ActiveModel::Serializer
   attributes :id, :legal_name
 
