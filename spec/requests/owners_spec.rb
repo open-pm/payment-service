@@ -74,7 +74,7 @@ RSpec.describe 'Owners API', type: :request do
           post  '/owners', params: {contact_infos_attributes: [], 
                                     document_attributes: { 
                                           document_type: %w(CPF CNPJ).sample, 
-                                          number: 12345},
+                                          number: Faker::Number.number(11) },
                                   address_attributes: {
                                               street: Faker::Address.street_name,
                                               number: Faker::Address.building_number,
@@ -86,7 +86,7 @@ RSpec.describe 'Owners API', type: :request do
 
         it 'miss contact_infos_attributes' do
           post '/owners', params: {legal_name: Faker::StarWars.character, 
-                                   document_attributes: { document_type: %w(CPF CNPJ).sample, number: 1234},
+                                   document_attributes: { document_type: %w(CPF CNPJ).sample, number: Faker::Number.number(10)},
                                     address_attributes: {
                                               street: Faker::Address.street_name,
                                               number: Faker::Address.building_number,
@@ -111,7 +111,7 @@ RSpec.describe 'Owners API', type: :request do
         
         it 'miss address_attributes_attribtues' do
           post '/owners', params: {legal_name: Faker::StarWars.character,
-                                  contact_infos_attributes: [], document_attributes: { document_type: %w(CPF CNPJ).sample, number: 12345} } 
+                                  contact_infos_attributes: [], document_attributes: { document_type: %w(CPF CNPJ).sample, number: Faker::Number.number(11)} } 
           expect(response).to have_http_status(400)
         end
       end
@@ -120,7 +120,7 @@ RSpec.describe 'Owners API', type: :request do
         before do
           post '/owners', params:  {legal_name: Faker::StarWars.character, 
                                     document_attributes: { document_type: %w(CPF CNPJ).sample, 
-                                                           number: 12345},
+                                                           number: Faker::Number.number(11)},
                                     contact_infos_attributes:  [{contact_type: %w(email cell_phone land_number).sample, 
                                                       info: Faker::Internet.email }],
                                     address_attributes: {
@@ -141,10 +141,10 @@ RSpec.describe 'Owners API', type: :request do
 
     end
 
-    describe "PUT /owners" do
+    describe "PUT /owners/:id" do
       let(:owner) {owners.last}
 
-      context "Update legal_name" do
+      context 'passing legal_name attribute' do
         let(:new_legal_name) {  'new_legal_name' }
         before { put "/owners/#{owner.id}", params: {legal_name: new_legal_name }}
         
@@ -159,8 +159,35 @@ RSpec.describe 'Owners API', type: :request do
         end
 
       end
-      
 
+      context 'passing documment attributes' do
+        let(:new_document) { {document_type: %w(CPF CNPJ).sample, number: Faker::Number.number(11)} }
+        let(:owner){ owners.last }
+        before{ put "/owners/#{owner.id}", params: { document_attributes: new_document} }
+        let(:owner_serializer) { OwnerSerializer.new(owner) }
+
+        it 'returns 204 No Content' do
+          expect(response).to have_http_status(204)
+        end
+
+        it 'updates the document in resource' do
+          get "/owners/#{owner.id}"
+          expect(json['document']['document_type']).to eq(new_document[:document_type])
+          expect(json['document']['number']).to eq(new_document[:number])
+
+          # We are not testing the document_type update because it is a random choise in a list, then 
+          # Testing it could cause tests failures.
+          expect(json['document']['number']).not_to eq(owner_serializer.serializable_hash[:address][:number])
+        end
+
+        it 'doesn\'t other properties' do
+          get "/owners/#{owner.id}"
+          expect(json['legal_name']).to eq(owner.legal_name)
+          expect(json['contact_infos'].map{ |item|  item.symbolize_keys } ).to eq(owner_serializer.serializable_hash[:contact_infos])
+          expect(json['address'].symbolize_keys  ).to eq(owner_serializer.serializable_hash[:address])
+          
+        end
+      end
     end
 
 

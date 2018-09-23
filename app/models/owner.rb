@@ -11,4 +11,9 @@ class Owner < ApplicationRecord
 
   validates_presence_of :legal_name, :document, :contact_infos, :address
   accepts_nested_attributes_for :document, :contact_infos, :address
+
+  def contact_infos_attributes=(*attrs)
+    self.contact_infos.clear
+    super(*attrs)
+  end
 end
