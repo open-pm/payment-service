@@ -28,7 +28,7 @@ class OwnersController < ApplicationController
 
   # PUT /owners/:id
   def update
-    @owner = Owner.update!(owner_params)
+    @owner = Owner.update(owner_params)
 
     head :no_content
   end
