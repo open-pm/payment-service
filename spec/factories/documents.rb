@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :document do
-    number { 'MyString' }
-    document_type { '' }
+    number { Faker::IDNumber.valid }
+    document_type { %w[ID Passpot CPF CNPJ].sample }
   end
 end

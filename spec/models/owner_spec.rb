@@ -9,4 +9,7 @@ RSpec.describe Owner, type: :model do
   it { should have_many(:recipient) }
 
   it { should validate_presence_of(:legal_name) }
+  it { should validate_presence_of(:document) }
+  it { should validate_presence_of(:contact_infos) }
+  it { should validate_presence_of(:address) }
 end

@@ -2,8 +2,7 @@
 
 FactoryBot.define do
   factory :contact_info do
-    document_type { '' }
+    contact_type { %w[email cel land_number].sample }
     info { 'MyString' }
-    owner { nil }
   end
 end
