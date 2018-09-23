@@ -190,5 +190,40 @@ RSpec.describe 'Owners API', type: :request do
       end
     end
 
+      context 'passing contact_infos attributes' do
+        let(:new_contact_infos) do
+              [
+                {contact_type: %w(email cell_phone land_number).sample, 
+                 info: Faker::Internet.email },
+                {contact_type: %w(email cell_phone land_number).sample, 
+                 info: Faker::Internet.email }
+              ]
+        end
+        let(:owner){ owners.last }
+        let(:owner_serializer) { OwnerSerializer.new(owner) }
+
+        context 'should' do
+          before { put "/owners/#{owner.id}", params: { contact_infos_attributes: new_contact_infos } }
+
+          it 'return 204 No Content' do
+            expect(response).to have_http_status(204)
+          end
+
+          it 'update the contact_infos values' do
+            get "/owners/#{owner.id}"
+            expect(json['contact_infos'].map{ |item| item.symbolize_keys } ).to eq(new_contact_infos)
+            expect(json['contact_infos'].map{ |item| item.symbolize_keys} ).not_to eq(owner_serializer.serializable_hash[:contact_infos])
+          end
+
+          it 'not update the other properties' do
+            get "/owners/#{owner.id}"
+            expect(json['legal_name']).to eq(owner.legal_name)
+            expect(json['address'].symbolize_keys  ).to eq(owner_serializer.serializable_hash[:address])
+            expect(json['document'].symbolize_keys  ).to eq(owner_serializer.serializable_hash[:document])
+          end
+
+        end
+
+      end
 
 end
