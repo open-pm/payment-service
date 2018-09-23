@@ -2,10 +2,9 @@
 
 FactoryBot.define do
   factory :address do
-    street { 'MyString' }
-    number { 1 }
-    zip_code { 'MyString' }
-    complement { 'MyString' }
-    owner { nil }
+    street { Faker::Address.street_name }
+    number { Faker::Address.building_number }
+    zip_code { Faker::Address.zip_code }
+    complement { [nil, '', Faker::Address.secondary_address].sample }
   end
 end
