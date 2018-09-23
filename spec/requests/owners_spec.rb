@@ -132,7 +132,7 @@ RSpec.describe 'Owners API', type: :request do
                                     }
         end
 
-        it 'returns 200 OK' do
+        it 'returns 201 OK' do
           expect(response).to have_http_status(201)
         end
 
@@ -140,4 +140,28 @@ RSpec.describe 'Owners API', type: :request do
       end
 
     end
+
+    describe "PUT /owners" do
+      let(:owner) {owners.last}
+
+      context "Update legal_name" do
+        let(:new_legal_name) {  'new_legal_name' }
+        before { put "/owners/#{owner.id}", params: {legal_name: new_legal_name }}
+        
+        it  'returns 204 No Content' do
+          expect(response).to have_http_status(204)
+        end
+        
+        it 'updates the resource' do
+          get "/owners/#{owner.id}"
+          expect(json['legal_name']).to eq(new_legal_name)
+
+        end
+
+      end
+      
+
+    end
+
+
 end
